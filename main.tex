@@ -53,13 +53,40 @@ Shanik Dassenaike \\
 \maketitle
 
 \section*{Question 1}
-To implement ICM, we took Algorithm 1 from the pdf and created an implementation of it. The objective was, given an image that had been corrupted by some noise, to reconstruct the original (binary) image. This was done by considering the original image to be a latent image, with these latent variables generating the corrupted one. So, we started by initialising the pixels of the latent image to be equal to those of the corrupt image. As the original image was binary, we then compress the space of the latent image such that every pixel has value either -1 or 1.
+To implement ICM, we took Algorithm 1 from the pdf and created an implementation of it. The objective was, given an image that had been corrupted by some noise, to reconstruct the original (binary) image. This was done by considering the original image to be a latent image, with these latent variables generating the corrupted one. So, we started by initialising the pixels of the latent image to be equal to those of the corrupt image. As the original image was binary, we then compressed the space of the latent image such that every pixel has value either -1 or 1.
 
 For the probability $p(\textbf{y}|\textbf{x})$, we had $p(\textbf{y}|\textbf{x}) = \frac{1}{Z_{1}} \prod_{i=1}^{N} e^{L_{i}(x_{i})}$. We had to choose $L_{i} (x_{i})$ to be a function that would generate a large value if $x_{i}$ was likely to have generated $y_{i}$; we decided that to be simply $x_{i} \cdot y_{i}$, after transforming $\textbf{y}$ by subtracting 0.5. This was because $x_{i}$ could only be $-1$ or $1$, and $y_{i}$ ranged from $0$ to $1$. In this way, if a pixel $y_{i}$ in the corrupted image had a value closer to 1 than 0.5, the result would have a positive value (due to the transformation of y) if the latent pixel $x_{i}$ had value $x_{i} = 1$, and a negative value if $x_{i} = -1$. A similar argument is clear for if $y_{i}$ was closer to 0 than 0.5 and $x_{i} = -1$, as compared to $x_{i} = 1$.
 
-We we more directly able to implement $p(\textbf{x})$, as we had $p(\textbf{x}) = \frac{1}{Z_{0}} e^{E_{0}(x)}$, where the energy function $E_{0}(x) = \sum_{i=1}^{N} \sum_{j \in \mathcal{N}(i)} w_{ij} \cdot x_{i} \cdot x_{j}$, with $\mathcal{N}(i)$ the list of neighbours of node i, $w_{ij}$ weights which we assumed to be $= 1$.
+We we more directly able to implement $p(\textbf{x})$, as we had $p(\textbf{x}) = \frac{1}{Z_{0}} e^{E_{0}(x)}$, where the energy function $E_{0}(x) = \sum_{i=1}^{N} \sum_{j \in \mathcal{N}(i)} w_{ij} \cdot x_{i} \cdot x_{j}$, with $\mathcal{N}(i)$ the list of neighbours of node i, $w_{ij}$ weights which we assumed to be $= 1$. \textcolor{red}{need to see how varying the weights changes things}
 
 We used these to create our joint probability function and then implemented the rest of the algorithm almost directly, with the exception that we added a flag that took note of if any pixel's value was ever updated (i.e. if we ever had a pixel whose value was 1 with the probability of its value being 1 greater than being -1, or vice-versa). If this did not happen across one pass of the entire image, we could bail early, as every pixel is already in its most probable state.
 
 We realised that our functions were very slow, iterating over all the pixels in the image 3 times; the complexity of our algorithm meant it was very inefficient. We improved each of the functions in the following ways: the likelihood function we scaled the entire y array and then multiplied the x and y arrays together element-wise, and took the sum of the resultant array; the energy function we used a 2d convolution to create a new array where every element was replaced by the sum of its neighbours, which we then element-wise multiplied with the x array and took the sum of the resultant array. For all the functions we added in the calculations for both $x_{i} = 1$ and $x_{i} = -1$ to the function, and we scaled down the values returned by likelihood and energy before exponentiation to make for faster calculation; as we were only going to compare them, this was fine.
+
+\section*{Question 2}
+
+By implementing algorithm 3 we were able to produce these results.
+
+how we implemented
+
+how we derived probablity function
+
+Pics here
+
+discussion of different images
+
+why does it work better for different types of noise
+
+how much noise can it handle
+
+why is this limit there
+
+\section*{Question 3}
+
+\section*{Question 5}
+
+
+
 \end{document}
+
+
