@@ -1,5 +1,7 @@
 # Machine Learning CW2
 
+Compile the main.tex for the Latex Report.
+
 ## Image Reconstruction
 
 Group Project to analyse algorithms to implement key machine learning concepts.
